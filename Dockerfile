@@ -45,6 +45,11 @@ ENV NODE_ENV=production
 RUN apt-get update \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     ca-certificates \
+    curl \
+    ffmpeg \
+    imagemagick \
+    jq \
+    poppler-utils \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
