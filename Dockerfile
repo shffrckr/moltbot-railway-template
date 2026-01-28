@@ -38,10 +38,21 @@ ENV MOLTBOT_PREFER_PNPM=1
 RUN pnpm ui:install && pnpm ui:build
 
 
+# =============================================================================
 # Runtime image
+# =============================================================================
 FROM node:22-bookworm
 ENV NODE_ENV=production
 
+# -----------------------------------------------------------------------------
+# System packages
+# -----------------------------------------------------------------------------
+# curl       - HTTP requests, downloads
+# ffmpeg     - Audio/video conversion, transcription prep
+# imagemagick - Image manipulation
+# jq         - JSON parsing in shell
+# poppler-utils - PDF text extraction (pdftotext)
+# -----------------------------------------------------------------------------
 RUN apt-get update \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -51,6 +62,13 @@ RUN apt-get update \
     jq \
     poppler-utils \
   && rm -rf /var/lib/apt/lists/*
+
+# -----------------------------------------------------------------------------
+# Global npm packages
+# -----------------------------------------------------------------------------
+# bird - X/Twitter CLI (@steipete/bird)
+# -----------------------------------------------------------------------------
+RUN npm install -g @steipete/bird && npm cache clean --force
 
 WORKDIR /app
 
