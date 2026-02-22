@@ -20,8 +20,9 @@ RUN corepack enable
 
 WORKDIR /moltbot
 
-# Pin to a known ref (tag/branch). If it doesn't exist, fall back to main.
-ARG MOLTBOT_GIT_REF=main
+# Pin to a known ref (tag or branch). Default: latest release for reproducible builds.
+# Override with e.g. docker build --build-arg MOLTBOT_GIT_REF=main for main branch.
+ARG MOLTBOT_GIT_REF=v2026.2.21
 RUN git clone --depth 1 --branch "${MOLTBOT_GIT_REF}" https://github.com/moltbot/moltbot.git .
 
 # Patch: relax version requirements for packages that may reference unpublished versions.
